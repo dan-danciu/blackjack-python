@@ -144,13 +144,14 @@ class Player:
             self.bankroll = "I'm the dealer\n"
 
     def __del__(self):
-        del self.hand
-        del self.aces
-        del self.bankroll
+        self.hand.__del__()
+        self.aces.__del__()
+        if self.name.lower() != 'dealer':
+            self.bankroll.__del__()
         #print('Buh bye' + self.name)
 
     def deal(self):
-        card = Card(deck.cards.pop())
+        card = Card(deck.drawCard())
         if card.name == 'A':
             self.aces.addCard(card)
         while self.hand.total() + card.value > 21 and len(self.aces) > 0:
@@ -166,8 +167,8 @@ class Player:
                 self.deal()
 
     def newHand(self):
-        del self.hand
-        del self.aces
+        self.hand.__del__()
+        self.aces.__del__()
         self.hand = CollectionOfCards()
         self.aces = CollectionOfCards()
 
@@ -265,6 +266,6 @@ while True:
     if not player.playAgain():
         break
     else:
-        del deck
-        del player
-        del dealer
+        deck.__del__()
+        player.__del__()
+        dealer.__del__()
